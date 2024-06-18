@@ -13,7 +13,9 @@ description = 'Example time-series forcasting project'
 authors = [{ name = "Lundy Bernard" }]
 license = { file = "LICENSE" }
 
-dependencies = []
+dependencies = [
+    "numpy<2",
+]
 
 [project.scripts]
 bat = 'bat.cli:BATCLI'
@@ -27,18 +29,25 @@ repository = 'https://github.com/lundybernard/forecast/'
 
 [project.optional-dependencies]
 dev = [
+    # Testing
     "pytest",
     "pytest-cov",
     "coverage",
     "hypothesis",
+    "mutmut",
+    # Linting
     "flake8",
     "Flake8-pyproject",
     "black",
-    "mutmut",
+    # type checking
     "mypy",
     "pandas-stubs",
     "pandera[mypy]",
     "data-science-types",
+    # Notebooks
+    "matplotlib",
+    "ipython",
+    "ipykernel",
 ]
 
 [tool.setuptools]
