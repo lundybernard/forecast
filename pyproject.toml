@@ -48,6 +48,7 @@ dev = [
     "matplotlib",
     "ipython",
     "ipykernel",
+    "nbconvert",
 ]
 
 [tool.setuptools]
