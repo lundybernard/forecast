@@ -1,9 +1,9 @@
-import argparse
+from argparse import ArgumentParser, Namespace
 
 
 # TODO: Convert this into a ArgumentParser object, and make them composable
-def server_parser():
-    parser = argparse.ArgumentParser(
+def server_parser() -> ArgumentParser:
+    parser = ArgumentParser(
         prog="server",
         description="http server related commands",
     )
@@ -61,12 +61,15 @@ def get_help(parser):
     return help
 
 
-def start(conf):
+def start(args: Namespace):
     from .server import start_api_server
+    from ..conf import get_config
+
+    cfg = get_config(cli_args=args)
 
     start_api_server(
-        host=conf.server.host,
-        port=int(conf.server.port),
+        host=cfg.server.host,
+        port=int(cfg.server.port),
     )
 
 
@@ -75,6 +78,6 @@ def test(_):
     import unittest
 
     loader = unittest.TestLoader()
-    suite = loader.discover("functional_tests", pattern="*_test.py")
+    suite = loader.discover("tests", pattern="*_test.py")
     runner = unittest.TextTestRunner()
     runner.run(suite)

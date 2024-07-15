@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from .example import Config
+from .server import ServerConfiguration
 
 
 @dataclass
 class GlobalConfig:
     # example module with configuration dataclass
-    example: Config
+    server: ServerConfiguration
