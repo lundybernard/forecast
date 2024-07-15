@@ -14,7 +14,12 @@ authors = [{ name = "Lundy Bernard" }]
 license = { file = "LICENSE" }
 
 dependencies = [
+    "batconf",
+    "connexion[flask, uvicorn]",
+    "flask",
     "numpy<2",
+    "requests",
+    "pyyaml",
 ]
 
 [project.scripts]
