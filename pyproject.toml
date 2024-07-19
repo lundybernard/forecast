@@ -1,41 +1,116 @@
 # pyproject.toml
 
 [build-system]
-#requires = ["setuptools", "wheel"]
-#build-backend = "setuptools.build_meta"
-requires = ['poetry-core~=1.0']
-build-backend = 'poetry.core.masonry.api'
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+#requires = ['poetry-core~=1.0']
+#build-backend = 'poetry.core.masonry.api'
 
-[tool.poetry]
+[project]
 name = 'bat'
 version = '0.0.1'
-description = ''
-authors = ['Lundy Bernard']
-license = 'MIT'
+description = 'Example time-series forcasting project'
+authors = [{ name = "Lundy Bernard" }]
+license = { file = "LICENSE" }
 
-[tool.poetry.scripts]
+dependencies = [
+    "batconf",
+    "connexion[flask, uvicorn]",
+    "flask",
+    "numpy<2",
+    "requests",
+    "pyyaml",
+]
+
+[project.scripts]
 bat = 'bat.cli:BATCLI'
 
-[tool.poetry.dependencies]
-python = '^3.8'
-batconf = '*'
-flask = '*'
-connexion = '*'
-requests = '*'
-pyyaml = '*'
+[project.readme]
+file = "README.md"
+content-type = "text/markdown; charset=UTF-8"
 
-[tool.poetry.dev-dependencies]
-setuptools = '*'
-pytest = '*'
+[project.urls]
+repository = 'https://github.com/lundybernard/forecast/'
 
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest",
+    "pytest-cov",
+    "coverage",
+    "hypothesis",
+    "mutmut",
+    # Linting
+    "flake8",
+    "Flake8-pyproject",
+    "black",
+    # type checking
+    "mypy",
+    "pandas-stubs",
+    "pandera[mypy]",
+    "data-science-types",
+    # Notebooks
+    "matplotlib",
+    "ipython",
+    "ipykernel",
+    "nbconvert",
+]
+
+[tool.setuptools]
+packages = ["bat"]
+
+# === Testing === #
 
 [tool.pytest.ini_options]
-addopts = "--cov=bat --cov-report html --cov-fail-under=100"
+addopts = "--cov=bat --cov-report=term --cov-report=xml --cov-fail-under=100"
+python_classes = '*Tests'
+python_files = ["*_test.py", "*_pytest.py"]
 
 [tool.coverage.run]
+source = ['bat/']
 omit = [
     # ignore coverage for these files
-    "bat/_version.py",
     "bat/server.py",
     "bat/tests/common_api_tests.py",
 ]
+
+[tool.coverage.report]
+fail_under = 100
+skip_covered = true
+show_missing = true
+skip_empty = true
+
+[tool.mutmut]
+paths_to_mutate = "bat/"
+tests_dir = "bat/"
+runner = "pytest --no-cov"
+
+# === Formatting === #
+
+[tool.flake8]
+max-line-length = "79"
+
+[tool.black]
+line-length = 79
+
+
+# === Static Type Checkers === #
+
+[tool.mypy]
+plugins = ["pandera.mypy", "pydantic.mypy"]
+
+# Pydantic recommended settings
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
